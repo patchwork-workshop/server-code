@@ -1,0 +1,31 @@
+{
+  "name": "quilt-server",
+  "version": "1.1.0",
+  "description": "The graphics playing on the quilt, are controlled and changed remotely using Xbee RF modules. One end is integrated inside the quilt and the other end is connected to server. NodeJS server connects to Xbee model using [serialport](https://www.npmjs.com/package/serialport). It waits till it establishes a successful handshake with quilt controller. Subsequently, using expressJS it'll provide users with a web interface to choose the graphic modes on the quilt. As the user selects their desired mode, server will notify the quilt and updates it's display.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/patchwork-workshop/server-code.git"
+  },
+  "keywords": [
+    "express",
+    "serial",
+    "port",
+    "Xbee",
+    "RF",
+    "module"
+  ],
+  "author": "Saman Tehrani",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/patchwork-workshop/server-code/issues"
+  },
+  "homepage": "https://github.com/patchwork-workshop/server-code#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "serialport": "^4.0.1"
+  }
+}
