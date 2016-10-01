@@ -106,17 +106,9 @@ serialPort.on('data', function(data) {
                 }
                 break;
             case 'U':
-                var upcomingID = parseInt(incomingBuffer.slice(1, 5));
-                console.log("UPCOMING ID IS: " + upcomingID);
-                if (upcomingID == 0) {
-                    io.emit('remove', 'waitingMode');
-                } else {
-                    for (var i = requests.length - 1; i >= 0; i--) {
-                        if (requests[i].ID == upcomingID) {
-                            io.emit('remove', requests[i].ID);
-                        }
-                    }
-                }
+                var upcomingMode = parseInt(incomingBuffer.slice(1, 5));
+                console.log("UPCOMING Mode IS: " + upcomingMode);
+                io.emit('upcoming', upcomingMode);
                 break;
             default:
                 console.log('UNKNOWN MESSAGE FROM CLIENT!');
