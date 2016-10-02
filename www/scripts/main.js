@@ -1,41 +1,62 @@
-var socket = io();
-var MODES = [
-    'rotate',
-    'Vline',
-    'Hline',
-    'inout',
-    'snake',
-    'random',
-    'blink'
-];
 (function() {
+    let socket = io();
+    let MODES = [
+        'rotate',
+        'Vline',
+        'Hline',
+        'inout',
+        'snake',
+        'random',
+        'blink'
+    ];
+    let autoTransitionTimer;
+    let currentMode = 0;
     if (document.readyState != 'loading') {
-        attachListeners();
+        init();
     } else {
         document.addEventListener('DOMContentLoaded', () => {
-            attachListeners();
+            init();
         });
+    }
+
+    function init() {
+        attachListeners();
+        enableAutoTransition(true);
     }
 
     function attachListeners() {
         let items = document.querySelectorAll('#mode-collection .item > img');
         for (item of items) {
-            item.addEventListener('click', (evnt) => submitMode(evnt));
+            item.addEventListener('click', (evnt) => submitMode(event.target.dataset.mode));
         }
     }
 
-    function submitMode(evnt) {
-        let mode = event.target.dataset.mode;
-        console.log(mode);
-        socket.emit('newMessageReceived', mode);
+    function submitMode(mode) {
+        socket.emit('newMessageReceived', MODES[mode]);
     }
-    socket.on('upcoming', (mode) => changeMode(MODES[mode]));
+    socket.on('upcoming', (mode) => changeMode(mode));
 
     function changeMode(mode) {
-        console.log(mode);
-        let item = document.querySelector('#mode-collection .item > img[data-mode="' + mode + '"]');
+        let item = document.querySelector('#mode-collection .item > img[data-mode="' + MODES[mode] + '"]');
         let currentItem = document.querySelector('#current-mode .item');
         currentItem.innerHTML = "";
         currentItem.appendChild(item.cloneNode());
+        currentMode = mode;
+    }
+
+    function enableAutoTransition(enable) {
+
+        if (enable) {
+            autoTransitionTimer = setInterval(() => {
+                submitMode((++currentMode < MODES.length) ? ((currentMode) => {
+                    return currentMode;
+                })(currentMode) : ((currentMode) => {
+                    currentMode = 1;
+                    return currentMode;
+                })(currentMode));
+            }, 20000);
+        } else {
+            removeInterval(autoTransitionTimer);
+        }
     }
 })();
